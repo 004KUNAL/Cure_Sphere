@@ -14,6 +14,24 @@ connectDB();
 
 const app = express();
 
+// Enable CORS - Absolute top
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [];
+    const isVercel = /\.vercel\.app$/.test(origin);
+    const isAllowed = allowedOrigins.includes(origin) || allowedOrigins.includes('*') || process.env.NODE_ENV !== 'production';
+    
+    if (isVercel || isAllowed) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked:', origin);
+      callback(null, false);
+    }
+  },
+  credentials: true
+}));
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,23 +43,6 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
-// Enable CORS - Move to top
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [];
-    const currentOrigin = origin.toLowerCase();
-    const isVercel = currentOrigin.endsWith('.vercel.app');
-    if (isVercel || allowedOrigins.includes(origin) || allowedOrigins.includes('*') || process.env.NODE_ENV !== 'production') {
-      callback(null, true);
-    } else {
-      console.log('Blocked by CORS:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
 
 // Security headers
 app.use(helmet({
