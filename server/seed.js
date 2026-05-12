@@ -99,9 +99,19 @@ const seedData = async () => {
     console.log('Connected to MongoDB for seeding...');
     
     // Clear existing
-    await User.deleteMany({ role: 'doctor' });
+    await User.deleteMany({});
     await Doctor.deleteMany({});
     await Medicine.deleteMany({});
+    await Post.deleteMany({});
+
+    // Create a Sample Vendor
+    const vendor = await User.create({
+      name: 'Global Pharmacy',
+      email: 'vendor@example.com',
+      password: 'password123',
+      role: 'vendor',
+      isVerified: true
+    });
 
     for (let d of doctors) {
       const user = await User.create({
@@ -127,7 +137,8 @@ const seedData = async () => {
       });
     }
 
-    await Medicine.insertMany(medicines);
+    const medicinesWithVendor = medicines.map(med => ({ ...med, vendor: vendor._id }));
+    await Medicine.insertMany(medicinesWithVendor);
     console.log('Medicines Seeded!');
 
     // Get a user for posts
