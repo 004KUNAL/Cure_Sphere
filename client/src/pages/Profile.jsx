@@ -37,7 +37,8 @@ import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
-  return `${API_BASE_URL}${avatar}`;
+  const avatarPath = avatar.startsWith('/') ? avatar : `/${avatar}`;
+  return `${API_BASE_URL}${avatarPath}`;
 };
 
 const Profile = () => {
@@ -288,7 +289,7 @@ const Profile = () => {
       {/* Cover Image */}
       <div className="h-48 md:h-64 bg-gradient-to-r from-primary/20 to-secondary/20 relative overflow-hidden">
         {profile.cover && (
-          <img src={`${API_BASE_URL}${profile.cover}`} className="w-full h-full object-cover" alt="" />
+          <img src={`${API_BASE_URL}${profile.cover.startsWith('/') ? '' : '/'}${profile.cover}`} className="w-full h-full object-cover" alt="" />
         )}
         <div className="absolute inset-0 backdrop-blur-[2px] bg-black/5" />
       </div>
@@ -591,9 +592,9 @@ const Profile = () => {
                                   {post.media.map((item, i) => (
                                     <div key={i} className="relative aspect-video bg-gray-100">
                                       {item.type === 'video' ? (
-                                        <video src={`${API_BASE_URL}${item.url}`} controls className="w-full h-full object-cover" />
+                                        <video src={`${API_BASE_URL}${item.url.startsWith('/') ? '' : '/'}${item.url}`} controls className="w-full h-full object-cover" />
                                       ) : (
-                                        <img src={`${API_BASE_URL}${item.url}`} className="w-full h-full object-cover" alt="" />
+                                        <img src={`${API_BASE_URL}${item.url.startsWith('/') ? '' : '/'}${item.url}`} className="w-full h-full object-cover" alt="" />
                                       )}
                                     </div>
                                   ))}
@@ -692,7 +693,7 @@ const Profile = () => {
                         {selectedFiles.cover ? (
                           <img src={URL.createObjectURL(selectedFiles.cover)} className="w-full h-full object-cover" alt="" />
                         ) : profile.cover ? (
-                          <img src={`${API_BASE_URL}${profile.cover}`} className="w-full h-full object-cover" alt="" />
+                          <img src={`${API_BASE_URL}${profile.cover.startsWith('/') ? '' : '/'}${profile.cover}`} className="w-full h-full object-cover" alt="" />
                         ) : (
                           <ImageIcon className="text-gray-300" size={32} />
                         )}

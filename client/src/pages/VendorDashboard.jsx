@@ -19,7 +19,8 @@ import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return null;
   if (avatar.startsWith('http')) return avatar;
-  return `${API_BASE_URL}${avatar}`;
+  const avatarPath = avatar.startsWith('/') ? avatar : `/${avatar}`;
+  return `${API_BASE_URL}${avatarPath}`;
 };
 
 const VendorDashboard = () => {
@@ -188,7 +189,7 @@ const VendorDashboard = () => {
                 <div key={med._id} className="glass rounded-[32px] overflow-hidden group">
                   <div className="aspect-video relative overflow-hidden">
                     <img 
-                      src={med.image?.startsWith('http') ? med.image : `${API_BASE_URL}${med.image}`} 
+                      src={med.image?.startsWith('http') ? med.image : `${API_BASE_URL}${med.image.startsWith('/') ? '' : '/'}${med.image}`} 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                       alt="" 
                     />

@@ -7,7 +7,8 @@ import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
-  return `${API_BASE_URL}${avatar}`;
+  const avatarPath = avatar.startsWith('/') ? avatar : `/${avatar}`;
+  return `${API_BASE_URL}${avatarPath}`;
 };
 import { 
   MessageSquare, 
@@ -295,9 +296,9 @@ const Community = () => {
                         {post.media.map((item, i) => (
                           <div key={i} className="relative aspect-video bg-gray-100">
                             {item.type === 'video' ? (
-                              <video src={`${API_BASE_URL}${item.url}`} controls className="w-full h-full object-cover" />
+                              <video src={`${API_BASE_URL}${item.url.startsWith('/') ? '' : '/'}${item.url}`} controls className="w-full h-full object-cover" />
                             ) : (
-                              <img src={`${API_BASE_URL}${item.url}`} className="w-full h-full object-cover" alt="" />
+                              <img src={`${API_BASE_URL}${item.url.startsWith('/') ? '' : '/'}${item.url}`} className="w-full h-full object-cover" alt="" />
                             )}
                           </div>
                         ))}

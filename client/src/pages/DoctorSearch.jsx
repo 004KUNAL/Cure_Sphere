@@ -74,7 +74,7 @@ const DoctorSearch = () => {
               >
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img 
-                    src={doc.user.avatar ? (doc.user.avatar.startsWith('http') ? doc.user.avatar : `${API_BASE_URL}${doc.user.avatar}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${doc.user.name}`} 
+                    src={doc.user.avatar ? (doc.user.avatar.startsWith('http') ? doc.user.avatar : `${API_BASE_URL}${doc.user.avatar.startsWith('/') ? '' : '/'}${doc.user.avatar}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${doc.user.name}`} 
                     alt={doc.user.name} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />

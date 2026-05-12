@@ -123,7 +123,7 @@ const Pharmacy = () => {
               >
                 <div className="aspect-square overflow-hidden relative">
                   <img 
-                    src={med.image?.startsWith('http') ? med.image : `${API_BASE_URL}${med.image}`} 
+                    src={med.image?.startsWith('http') ? med.image : `${API_BASE_URL}${med.image.startsWith('/') ? '' : '/'}${med.image}`} 
                     alt={med.name} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />

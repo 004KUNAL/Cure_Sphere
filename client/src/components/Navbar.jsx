@@ -11,7 +11,8 @@ import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
-  return `${API_BASE_URL}${avatar}`;
+  const avatarPath = avatar.startsWith('/') ? avatar : `/${avatar}`;
+  return `${API_BASE_URL}${avatarPath}`;
 };
 
 const Navbar = () => {
