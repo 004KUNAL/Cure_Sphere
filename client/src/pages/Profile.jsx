@@ -213,7 +213,7 @@ const Profile = () => {
           'Content-Type': 'multipart/form-data'
         }
       };
-      const res = await axios.put(`${BASE_URL}/api/auth/profile`, formData, config);
+      const res = await axios.put(`${API_BASE_URL}/api/auth/profile`, formData, config);
       // Update local profile state
       setProfile(prev => ({ ...prev, ...res.data }));
       // Sync Redux store + localStorage so navbar/other components update immediately
@@ -238,7 +238,7 @@ const Profile = () => {
             'Content-Type': 'multipart/form-data'
           }
         };
-        const docRes = await axios.put(`${BASE_URL}/api/doctors/profile`, docFormData, docConfig);
+        const docRes = await axios.put(`${API_BASE_URL}/api/doctors/profile`, docFormData, docConfig);
         setProfile(prev => ({ ...prev, doctorInfo: docRes.data }));
       }
 
@@ -857,7 +857,7 @@ const Profile = () => {
                         >
                           {editFormData.doctorInfo.upiQR ? (
                             <img 
-                              src={editFormData.doctorInfo.upiQR instanceof File ? URL.createObjectURL(editFormData.doctorInfo.upiQR) : `${BASE_URL}${editFormData.doctorInfo.upiQR}`} 
+                              src={editFormData.doctorInfo.upiQR instanceof File ? URL.createObjectURL(editFormData.doctorInfo.upiQR) : `${API_BASE_URL}${editFormData.doctorInfo.upiQR}`} 
                               className="w-full h-full object-contain" 
                               alt="UPI QR" 
                             />
@@ -925,7 +925,7 @@ const Profile = () => {
                         >
                           {editFormData.vendorInfo.upiQR ? (
                             <img 
-                              src={editFormData.vendorInfo.upiQR instanceof File ? URL.createObjectURL(editFormData.vendorInfo.upiQR) : `${BASE_URL}${editFormData.vendorInfo.upiQR}`} 
+                              src={editFormData.vendorInfo.upiQR instanceof File ? URL.createObjectURL(editFormData.vendorInfo.upiQR) : `${API_BASE_URL}${editFormData.vendorInfo.upiQR}`} 
                               className="w-full h-full object-contain" 
                               alt="Vendor UPI QR" 
                             />

@@ -3,6 +3,7 @@ import { Bell, CheckCircle2, Clock, CreditCard, Stethoscope, ShoppingBag } from 
 import axios from 'axios';
 import API_BASE_URL from '../api/config';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const NotificationBell = () => {
