@@ -14,14 +14,22 @@ connectDB();
 
 const app = express();
 
-// Enable CORS - Absolute top
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
+console.log('--- CURESPHERE SERVER VERSION 2.0 (MANUAL CORS) ---');
 
-// Explicitly handle preflight requests for all routes
-app.options('*', cors());
+// Manual CORS Handler
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  // Allow all origins for now to solve the block
+  res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
 
 // Body parser
 app.use(express.json());
