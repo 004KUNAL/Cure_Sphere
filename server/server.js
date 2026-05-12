@@ -18,7 +18,9 @@ const app = express();
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
-    const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [];
+    const allowedOrigins = process.env.CLIENT_URL 
+      ? process.env.CLIENT_URL.split(',').map(url => url.trim().replace(/\/$/, '')) 
+      : [];
     const isVercel = /\.vercel\.app$/.test(origin);
     const isAllowed = allowedOrigins.includes(origin) || allowedOrigins.includes('*') || process.env.NODE_ENV !== 'production';
     
