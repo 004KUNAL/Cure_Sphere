@@ -32,14 +32,19 @@ app.use(helmet({
 }));
 
 // Enable CORS
-const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : ['*'];
+const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [];
 app.use(cors({
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+    
+    const isVercel = origin.endsWith('.vercel.app');
+    const isAllowed = allowedOrigins.includes(origin) || allowedOrigins.includes('*');
+    
+    if (isVercel || isAllowed) {
       return callback(null, true);
     } else {
+      console.log('CORS Blocked for origin:', origin);
       return callback(new Error('Not allowed by CORS'));
     }
   },
