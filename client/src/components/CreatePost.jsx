@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 import { Image as ImageIcon, Video, X, Stethoscope, Users } from 'lucide-react';
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000';
+import API_BASE_URL from '../api/config';
+
 const getAvatarUrl = (avatar) => {
   if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
-  return `${BASE_URL}${avatar}`;
+  return `${API_BASE_URL}${avatar}`;
 };
 
 const CreatePost = ({ user, onPostCreated, defaultScope = 'public' }) => {
@@ -50,7 +51,7 @@ const CreatePost = ({ user, onPostCreated, defaultScope = 'public' }) => {
           'Content-Type': 'multipart/form-data'
         }
       };
-      await axios.post('http://localhost:5000/api/posts', formData, config);
+      await axios.post(`${API_BASE_URL}/api/posts`, formData, config);
       
       setContent('');
       setSelectedMedia([]);

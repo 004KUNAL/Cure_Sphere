@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Phone, CreditCard, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import API_BASE_URL from '../api/config';
 
 const CheckoutModal = ({ isOpen, onClose, cart, total, onOrderSuccess }) => {
   const [step, setStep] = useState(1);
@@ -17,7 +18,7 @@ const CheckoutModal = ({ isOpen, onClose, cart, total, onOrderSuccess }) => {
   const [vendor, setVendor] = useState(null);
 
   const { user } = useSelector((state) => state.auth);
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = API_BASE_URL;
 
   useEffect(() => {
     if (isOpen && cart.length > 0) {
@@ -39,30 +40,29 @@ const CheckoutModal = ({ isOpen, onClose, cart, total, onOrderSuccess }) => {
   const handleOrder = async () => {
     setLoading(true);
     try {
-      // Group items by vendor since an order belongs to one vendor in our simplified model
-      // In a real app, you'd split orders or have sub-orders
-      const vendorId = cart[0].vendor; 
-      
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
 
+      const vendorId = cart[0]?.user;
+
       const orderData = {
-        items: cart.map(item => ({
-          medicine: item._id,
+        orderItems: cart.map(item => ({
+          name: item.name,
           quantity: item.quantity,
-          price: item.price
+          image: item.image,
+          price: item.price,
+          product: item._id
         })),
         shippingAddress: formData,
-        paymentMethod: formData.paymentMethod,
         totalPrice: total,
         vendor: vendorId
       };
 
-      const { data } = await axios.post('http://localhost:5000/api/orders', orderData, config);
+      const { data } = await axios.post(`${API_BASE_URL}/api/orders`, orderData, config);
       
       // Simulate Payment
-      await axios.put(`http://localhost:5000/api/orders/${data._id}/pay`, {}, config);
+      await axios.put(`${API_BASE_URL}/api/orders/${data._id}/pay`, {}, config);
       
       setStep(3);
       onOrderSuccess();

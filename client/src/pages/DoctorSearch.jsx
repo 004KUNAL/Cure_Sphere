@@ -5,12 +5,7 @@ import { Search, Star, ArrowRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-const BASE_URL = 'http://localhost:5000';
-const getAvatarUrl = (avatar) => {
-  if (!avatar) return null;
-  if (avatar.startsWith('http')) return avatar;
-  return `${BASE_URL}${avatar}`;
-};
+import API_BASE_URL from '../api/config';
 
 const DoctorSearch = () => {
   const navigate = useNavigate();
@@ -26,7 +21,7 @@ const DoctorSearch = () => {
     }
     const fetchDoctors = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/doctors');
+        const { data } = await axios.get(`${API_BASE_URL}/api/doctors`);
         setDoctors(data);
         setLoading(false);
       } catch (error) {
@@ -79,7 +74,7 @@ const DoctorSearch = () => {
               >
                 <div className="aspect-[4/3] overflow-hidden relative">
                   <img 
-                    src={getAvatarUrl(doc.user.avatar) || `https://api.dicebear.com/7.x/avataaars/svg?seed=${doc.user.name}`} 
+                    src={doc.user.avatar ? (doc.user.avatar.startsWith('http') ? doc.user.avatar : `${API_BASE_URL}${doc.user.avatar}`) : `https://api.dicebear.com/7.x/avataaars/svg?seed=${doc.user.name}`} 
                     alt={doc.user.name} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />

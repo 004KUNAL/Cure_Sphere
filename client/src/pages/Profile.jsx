@@ -32,12 +32,12 @@ import {
 } from 'lucide-react';
 import CreatePost from '../components/CreatePost';
 
-const BASE_URL = 'http://localhost:5000';
+import API_BASE_URL from '../api/config';
 
 const getAvatarUrl = (avatar) => {
   if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
-  return `${BASE_URL}${avatar}`;
+  return `${API_BASE_URL}${avatar}`;
 };
 
 const Profile = () => {
@@ -110,7 +110,7 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/auth/profile/${id}`);
+      const res = await axios.get(`${API_BASE_URL}/api/auth/profile/${id}`);
       setProfile(res.data);
       setIsFollowing(res.data.followers?.includes(currentUser?._id));
     } catch (err) {
@@ -131,7 +131,7 @@ const Profile = () => {
         headers: { Authorization: `Bearer ${currentUser?.token}` }
       };
       
-      const res = await axios.get(`http://localhost:5000${endpoint}`, config);
+      const res = await axios.get(`${API_BASE_URL}${endpoint}`, config);
       setData(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error('Error fetching tab data:', err);
@@ -144,7 +144,7 @@ const Profile = () => {
       const config = {
         headers: { Authorization: `Bearer ${currentUser.token}` }
       };
-      await axios.put(`http://localhost:5000/api/appointments/${appointmentId}`, { status }, config);
+      await axios.put(`${API_BASE_URL}/api/appointments/${appointmentId}`, { status }, config);
       fetchTabData();
     } catch (err) {
       console.error('Error updating status:', err);
@@ -157,7 +157,7 @@ const Profile = () => {
       const config = {
         headers: { Authorization: `Bearer ${currentUser.token}` }
       };
-      const res = await axios.put(`http://localhost:5000/api/auth/follow/${id}`, {}, config);
+      const res = await axios.put(`${API_BASE_URL}/api/auth/follow/${id}`, {}, config);
       setIsFollowing(!isFollowing);
       setProfile(prev => ({
         ...prev,
@@ -179,7 +179,7 @@ const Profile = () => {
       const config = {
         headers: { Authorization: `Bearer ${currentUser.token}` }
       };
-      const res = await axios.put(`http://localhost:5000/api/auth/privacy`, {}, config);
+      const res = await axios.put(`${API_BASE_URL}/api/auth/privacy`, {}, config);
       setProfile({ ...profile, isPrivate: res.data.isPrivate });
     } catch (err) {
       console.error('Error toggling privacy:', err);
@@ -288,7 +288,7 @@ const Profile = () => {
       {/* Cover Image */}
       <div className="h-48 md:h-64 bg-gradient-to-r from-primary/20 to-secondary/20 relative overflow-hidden">
         {profile.cover && (
-          <img src={`http://localhost:5000${profile.cover}`} className="w-full h-full object-cover" alt="" />
+          <img src={`${API_BASE_URL}${profile.cover}`} className="w-full h-full object-cover" alt="" />
         )}
         <div className="absolute inset-0 backdrop-blur-[2px] bg-black/5" />
       </div>
@@ -309,7 +309,7 @@ const Profile = () => {
                 onClick={async () => {
                   try {
                     const config = { headers: { Authorization: `Bearer ${currentUser.token}` } };
-                    const res = await axios.put('http://localhost:5000/api/doctors/status', {}, config);
+                    const res = await axios.put(`${API_BASE_URL}/api/doctors/status`, {}, config);
                     setProfile({ ...profile, isOnline: res.data.isOnline });
                   } catch (err) { console.error(err); }
                 }}
@@ -571,7 +571,7 @@ const Profile = () => {
                                         onClick={async () => {
                                           if (window.confirm('Delete this post?')) {
                                             const config = { headers: { Authorization: `Bearer ${currentUser.token}` } };
-                                            await axios.delete(`http://localhost:5000/api/posts/${post._id}`, config);
+                                            await axios.delete(`${API_BASE_URL}/api/posts/${post._id}`, config);
                                             fetchTabData();
                                           }
                                         }}
@@ -591,9 +591,9 @@ const Profile = () => {
                                   {post.media.map((item, i) => (
                                     <div key={i} className="relative aspect-video bg-gray-100">
                                       {item.type === 'video' ? (
-                                        <video src={`http://localhost:5000${item.url}`} controls className="w-full h-full object-cover" />
+                                        <video src={`${API_BASE_URL}${item.url}`} controls className="w-full h-full object-cover" />
                                       ) : (
-                                        <img src={`http://localhost:5000${item.url}`} className="w-full h-full object-cover" alt="" />
+                                        <img src={`${API_BASE_URL}${item.url}`} className="w-full h-full object-cover" alt="" />
                                       )}
                                     </div>
                                   ))}
@@ -611,7 +611,7 @@ const Profile = () => {
                                 <button 
                                   onClick={async () => {
                                     const config = { headers: { Authorization: `Bearer ${currentUser.token}` } };
-                                    await axios.put(`http://localhost:5000/api/posts/${post._id}/like`, {}, config);
+                                    await axios.put(`${API_BASE_URL}/api/posts/${post._id}/like`, {}, config);
                                     fetchTabData();
                                   }}
                                   className={`flex items-center gap-2 transition-colors group/action ${post.likes?.includes(currentUser?._id) ? 'text-pink-500' : 'hover:text-pink-500'}`}
@@ -692,7 +692,7 @@ const Profile = () => {
                         {selectedFiles.cover ? (
                           <img src={URL.createObjectURL(selectedFiles.cover)} className="w-full h-full object-cover" alt="" />
                         ) : profile.cover ? (
-                          <img src={`http://localhost:5000${profile.cover}`} className="w-full h-full object-cover" alt="" />
+                          <img src={`${API_BASE_URL}${profile.cover}`} className="w-full h-full object-cover" alt="" />
                         ) : (
                           <ImageIcon className="text-gray-300" size={32} />
                         )}

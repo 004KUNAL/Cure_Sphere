@@ -6,11 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, HeartPulse, User, LogOut, ChevronDown } from 'lucide-react';
 import NotificationBell from './NotificationBell';
 
-const BASE_URL = 'http://localhost:5000';
+import API_BASE_URL from '../api/config';
+
 const getAvatarUrl = (avatar) => {
-  if (!avatar) return null;
+  if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
-  return `${BASE_URL}${avatar}`;
+  return `${API_BASE_URL}${avatar}`;
 };
 
 const Navbar = () => {

@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import API_BASE_URL from '../api/config';
 
-const BASE_URL = 'http://localhost:5000';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
-  return `${BASE_URL}${avatar}`;
+  return `${API_BASE_URL}${avatar}`;
 };
 import { 
   MessageSquare, 
@@ -63,7 +63,7 @@ const Community = () => {
         headers: { Authorization: `Bearer ${user.token}` }
       } : {};
       
-      const res = await axios.get(`http://localhost:5000${endpoint}`, config);
+      const res = await axios.get(`${API_BASE_URL}${endpoint}`, config);
       setPosts(res.data);
     } catch (err) {
       console.error('Error fetching posts:', err);
@@ -90,7 +90,7 @@ const Community = () => {
     });
 
     try {
-      await axios.post('http://localhost:5000/api/posts', formData, getAuthConfig());
+      await axios.post(`${API_BASE_URL}/api/posts`, formData, getAuthConfig());
       
       setNewPostContent('');
       setSelectedMedia([]);
@@ -110,7 +110,7 @@ const Community = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.put(`http://localhost:5000/api/posts/${postId}/like`, {}, config);
+      await axios.put(`${API_BASE_URL}/api/posts/${postId}/like`, {}, config);
       fetchPosts();
     } catch (err) {
       console.error('Error liking post:', err);
@@ -123,7 +123,7 @@ const Community = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.put(`http://localhost:5000/api/posts/${postId}/save`, {}, config);
+      await axios.put(`${API_BASE_URL}/api/posts/${postId}/save`, {}, config);
       fetchPosts();
     } catch (err) {
       console.error('Error saving post:', err);
@@ -137,7 +137,7 @@ const Community = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.post(`http://localhost:5000/api/posts/${postId}/comment`, { text: commentText }, config);
+      await axios.post(`${API_BASE_URL}/api/posts/${postId}/comment`, { text: commentText }, config);
       setCommentText('');
       setCommentingOn(null);
       fetchPosts();
@@ -158,7 +158,7 @@ const Community = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.delete(`http://localhost:5000/api/posts/${postId}`, config);
+      await axios.delete(`${API_BASE_URL}/api/posts/${postId}`, config);
       fetchPosts();
     } catch (err) {
       console.error('Error deleting post:', err);
@@ -295,9 +295,9 @@ const Community = () => {
                         {post.media.map((item, i) => (
                           <div key={i} className="relative aspect-video bg-gray-100">
                             {item.type === 'video' ? (
-                              <video src={`http://localhost:5000${item.url}`} controls className="w-full h-full object-cover" />
+                              <video src={`${API_BASE_URL}${item.url}`} controls className="w-full h-full object-cover" />
                             ) : (
-                              <img src={`http://localhost:5000${item.url}`} className="w-full h-full object-cover" alt="" />
+                              <img src={`${API_BASE_URL}${item.url}`} className="w-full h-full object-cover" alt="" />
                             )}
                           </div>
                         ))}

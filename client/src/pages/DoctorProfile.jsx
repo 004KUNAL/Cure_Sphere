@@ -24,11 +24,11 @@ import {
   Lock
 } from 'lucide-react';
 
-const BASE_URL = 'http://localhost:5000';
+import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return null;
   if (avatar.startsWith('http')) return avatar;
-  return `${BASE_URL}${avatar}`;
+  return `${API_BASE_URL}${avatar}`;
 };
 
 const DoctorProfile = () => {
@@ -56,7 +56,7 @@ const DoctorProfile = () => {
     }
     const fetchDoctor = async () => {
       try {
-        const { data } = await axios.get(`${BASE_URL}/api/doctors/${id}`);
+        const { data } = await axios.get(`${API_BASE_URL}/api/doctors/${id}`);
         setDoctor(data);
         setLoading(false);
       } catch (error) {
@@ -75,7 +75,7 @@ const DoctorProfile = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.post('http://localhost:5000/api/appointments', {
+      await axios.post(`${API_BASE_URL}/api/appointments`, {
         doctorId: doctor._id,
         ...bookingData
       }, config);

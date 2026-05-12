@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Bell, CheckCircle2, Clock, CreditCard, Stethoscope, ShoppingBag } from 'lucide-react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import API_BASE_URL from '../api/config';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ const NotificationBell = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      const res = await axios.get('http://localhost:5000/api/notifications', config);
+      const res = await axios.get(`${API_BASE_URL}/api/notifications`, config);
       setNotifications(res.data);
     } catch (err) {
       console.error('Error fetching notifications:', err);
@@ -36,7 +36,7 @@ const NotificationBell = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.put(`http://localhost:5000/api/notifications/${id}/read`, {}, config);
+      await axios.put(`${API_BASE_URL}/api/notifications/${id}/read`, {}, config);
       setNotifications(notifications.map(n => n._id === id ? { ...n, isRead: true } : n));
     } catch (err) {
       console.error('Error marking as read:', err);
@@ -53,7 +53,7 @@ const NotificationBell = () => {
     if (nextState && unreadCount > 0) {
       try {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.put('http://localhost:5000/api/notifications/read-all', {}, config);
+        await axios.put(`${API_BASE_URL}/api/notifications/read-all`, {}, config);
         // Optimistically update local state
         setNotifications(notifications.map(n => ({ ...n, isRead: true })));
       } catch (err) {

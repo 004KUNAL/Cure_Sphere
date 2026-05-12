@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const BASE_URL = 'http://localhost:5000';
+import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   if (avatar.startsWith('http')) return avatar;
@@ -52,7 +52,7 @@ const Chat = () => {
   const fetchConversations = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user?.token}` } };
-      const res = await axios.get('http://localhost:5000/api/messages/conversations', config);
+      const res = await axios.get(`${API_BASE_URL}/api/messages/conversations`, config);
       setConversations(res.data);
     } catch (err) {
       console.error(err);
@@ -62,7 +62,7 @@ const Chat = () => {
   const fetchMessages = async () => {
     try {
       const config = { headers: { Authorization: `Bearer ${user?.token}` } };
-      const res = await axios.get(`http://localhost:5000/api/messages/${selectedChat._id}`, config);
+      const res = await axios.get(`${API_BASE_URL}/api/messages/${selectedChat._id}`, config);
       setMessages(res.data);
     } catch (err) {
       console.error(err);
@@ -75,7 +75,7 @@ const Chat = () => {
 
     try {
       const config = { headers: { Authorization: `Bearer ${user?.token}` } };
-      const res = await axios.post('http://localhost:5000/api/messages', {
+      const res = await axios.post(`${API_BASE_URL}/api/messages`, {
         receiver: selectedChat._id,
         text: newMessage
       }, config);

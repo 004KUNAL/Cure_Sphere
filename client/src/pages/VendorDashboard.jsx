@@ -15,7 +15,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-const BASE_URL = 'http://localhost:5000';
+import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return null;
   if (avatar.startsWith('http')) return avatar;
@@ -62,10 +62,10 @@ const VendorDashboard = () => {
       };
       
       if (activeTab === 'inventory') {
-        const { data } = await axios.get('http://localhost:5000/api/medicines/my-medicines', config);
+        const { data } = await axios.get(`${API_BASE_URL}/api/medicines/my-medicines`, config);
         setMedicines(data);
       } else {
-        const { data } = await axios.get('http://localhost:5000/api/orders/vendor', config);
+        const { data } = await axios.get(`${API_BASE_URL}/api/orders/vendor`, config);
         setOrders(data);
       }
       setLoading(false);
@@ -93,7 +93,7 @@ const VendorDashboard = () => {
         }
       };
 
-      await axios.post('http://localhost:5000/api/medicines', formData, config);
+      await axios.post(`${API_BASE_URL}/api/medicines`, formData, config);
       setIsAddModalOpen(false);
       fetchVendorData();
       setNewMedicine({ 
@@ -117,7 +117,7 @@ const VendorDashboard = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, { status }, config);
+      await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, { status }, config);
       fetchVendorData();
     } catch (error) {
       alert('Error updating status');
@@ -188,7 +188,7 @@ const VendorDashboard = () => {
                 <div key={med._id} className="glass rounded-[32px] overflow-hidden group">
                   <div className="aspect-video relative overflow-hidden">
                     <img 
-                      src={med.image?.startsWith('http') ? med.image : `http://localhost:5000${med.image}`} 
+                      src={med.image?.startsWith('http') ? med.image : `${API_BASE_URL}${med.image}`} 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                       alt="" 
                     />

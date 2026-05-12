@@ -9,6 +9,8 @@ import {
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../api/config';
+import GoogleMap from '../components/GoogleMap';
 
 const EMERGENCY_TYPES = [
   { id: 'cardiac', label: 'Heart Attack', icon: <Heart size={20} />, color: 'red', tip: 'Chew aspirin if available. Keep patient calm and seated.' },
@@ -97,10 +99,25 @@ const Emergency = () => {
 
   const getLocation = () => {
     setLocationLoading(true);
-    navigator.geolocation?.getCurrentPosition(
-      (pos) => { setLocation({ lat: pos.coords.latitude.toFixed(4), lng: pos.coords.longitude.toFixed(4) }); setLocationLoading(false); },
-      () => { setLocation({ lat: '28.6139', lng: '77.2090', fallback: true }); setLocationLoading(false); }
-    );
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = { 
+            lat: pos.coords.latitude, 
+            lng: pos.coords.longitude 
+          };
+          setLocation(coords);
+          setLocationLoading(false);
+        },
+        () => {
+          setLocation({ lat: 28.6139, lng: 77.2090, fallback: true });
+          setLocationLoading(false);
+        }
+      );
+    } else {
+      setLocation({ lat: 28.6139, lng: 77.2090, fallback: true });
+      setLocationLoading(false);
+    }
   };
 
   const handleSOS = async () => {
@@ -116,9 +133,9 @@ const Emergency = () => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}` }
       };
-      await axios.post('http://localhost:5000/api/emergency', {
+      await axios.post(`${API_BASE_URL}/api/emergency`, {
         type: selectedType.id,
-        location: location || { lat: '0', lng: '0' }
+        location: location || { lat: 28.6139, lng: 77.2090 }
       }, config);
       
       setTimeout(() => { 
@@ -244,12 +261,13 @@ const Emergency = () => {
                       className="w-full max-w-2xl glass p-6 md:p-10 rounded-[40px] shadow-2xl border-white/40">
                       <div className="flex flex-col md:flex-row gap-6 items-center">
                         <div className="relative w-full md:w-52 h-44 rounded-2xl overflow-hidden shadow-lg bg-gray-100 shrink-0 border-4 border-white">
-                          <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover" alt="Map" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                          <motion.div animate={{ x: [0, 15, 0], y: [0, 8, 0] }} transition={{ duration: 3, repeat: Infinity }}
-                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-red-500 drop-shadow-lg">
-                            <Navigation size={28} fill="currentColor" className="rotate-45" />
-                          </motion.div>
+                          {location && (
+                            <GoogleMap 
+                              center={location} 
+                              markers={[{ position: location, title: "Ambulance Location" }]} 
+                            />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                           <div className="absolute bottom-2 left-2 right-2">
                             <div className="bg-white/90 backdrop-blur-sm rounded-xl p-2 text-center shadow-sm">
                               <p className="text-[10px] font-black text-red-500 uppercase">Live Unit Location</p>

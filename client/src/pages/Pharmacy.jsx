@@ -3,8 +3,7 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Search, Plus, Tag, ShieldAlert, ShoppingCart, Minus, X } from 'lucide-react';
 import CheckoutModal from '../components/CheckoutModal';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../api/config';
 
 const Pharmacy = () => {
   const { user } = useSelector((state) => state.auth);
@@ -47,7 +46,7 @@ const Pharmacy = () => {
   useEffect(() => {
     const fetchMedicines = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/medicines');
+        const { data } = await axios.get(`${API_BASE_URL}/api/medicines`);
         setMedicines(data);
         setLoading(false);
       } catch (error) {
@@ -122,7 +121,7 @@ const Pharmacy = () => {
               >
                 <div className="aspect-square overflow-hidden relative">
                   <img 
-                    src={med.image?.startsWith('http') ? med.image : `http://localhost:5000${med.image}`} 
+                    src={med.image?.startsWith('http') ? med.image : `${API_BASE_URL}${med.image}`} 
                     alt={med.name} 
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
