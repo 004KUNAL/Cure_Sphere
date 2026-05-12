@@ -372,7 +372,7 @@ const DoctorProfile = () => {
                               <p className="text-[10px] font-black uppercase tracking-widest text-blue-400 mb-4">Scan QR to Pay with UPI</p>
                               <div className="w-48 h-48 bg-white p-4 rounded-2xl shadow-sm mb-4 border border-blue-100 flex items-center justify-center overflow-hidden">
                                  {doctor.upiQR ? (
-                                   <img src={`${BASE_URL}${doctor.upiQR}`} className="w-full h-full object-contain" alt="Doctor UPI QR" />
+                                   <img src={`${API_BASE_URL}${doctor.upiQR}`} className="w-full h-full object-contain" alt="Doctor UPI QR" />
                                  ) : (
                                    <div className="flex flex-col items-center gap-2 text-gray-300">
                                       <CreditCard size={40} />

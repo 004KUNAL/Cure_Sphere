@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { Search, Plus, Tag, ShieldAlert, ShoppingCart, Minus, X } from 'lucide-react';

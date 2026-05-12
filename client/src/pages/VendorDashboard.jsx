@@ -19,7 +19,7 @@ import API_BASE_URL from '../api/config';
 const getAvatarUrl = (avatar) => {
   if (!avatar) return null;
   if (avatar.startsWith('http')) return avatar;
-  return `${BASE_URL}${avatar}`;
+  return `${API_BASE_URL}${avatar}`;
 };
 
 const VendorDashboard = () => {
