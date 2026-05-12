@@ -34,6 +34,9 @@ app.use(cors({
   credentials: true
 }));
 
+// Explicitly handle preflight requests for all routes
+app.options('*', cors());
+
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
