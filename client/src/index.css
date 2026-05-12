@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0ea5e9;
+  --color-primary-dark: #0369a1;
+  --color-primary-light: #7dd3fc;
+  --color-secondary: #14b8a6;
+  --color-secondary-dark: #0f766e;
+  --color-secondary-light: #99f6e4;
+  --color-accent: #22c55e;
+  --color-dark: #0f172a;
+  --color-light: #f8fafc;
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui;
+  --font-display: "Outfit", sans-serif;
+}
+
+/* Custom Base Styles */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-light text-dark font-sans overflow-x-hidden;
+  }
+}
+
+/* Lenis Smooth Scroll Styles */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Premium Component Utilities */
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-dark/70 backdrop-blur-lg border border-white/10 shadow-xl;
+  }
+
+  .btn-primary {
+    @apply px-6 md:px-8 py-3 md:py-4 bg-primary text-white rounded-full font-bold hover:bg-sky-600 transition-all duration-300 shadow-lg hover:shadow-primary/30 active:scale-95;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32 px-4 md:px-12 lg:px-24;
+  }
+
+  .heading-xl {
+    @apply text-4xl md:text-6xl lg:text-7xl font-display font-extrabold leading-tight;
+  }
+
+  .heading-lg {
+    @apply text-2xl md:text-4xl lg:text-5xl font-display font-bold leading-tight;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+}
