@@ -26,29 +26,26 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Security headers
-app.use(helmet({
-  crossOriginResourcePolicy: false,
-}));
-
-// Enable CORS
-const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [];
+// Enable CORS - Move to top
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    
-    const isVercel = origin.endsWith('.vercel.app');
-    const isAllowed = allowedOrigins.includes(origin) || allowedOrigins.includes('*');
-    
-    if (isVercel || isAllowed) {
-      return callback(null, true);
+    const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : [];
+    const currentOrigin = origin.toLowerCase();
+    const isVercel = currentOrigin.endsWith('.vercel.app');
+    if (isVercel || allowedOrigins.includes(origin) || allowedOrigins.includes('*') || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
     } else {
-      console.log('CORS Blocked for origin:', origin);
-      return callback(new Error('Not allowed by CORS'));
+      console.log('Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true
+}));
+
+// Security headers
+app.use(helmet({
+  crossOriginResourcePolicy: false,
 }));
 
 // Static folder
