@@ -1,0 +1,30 @@
+name: Maintain GitHub Streak
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Runs daily at 8:00 AM UTC (1:30 PM IST)
+  workflow_dispatch:     # Allows manual trigger from the GitHub Actions tab
+
+jobs:
+  maintain-streak:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Update Last Active Timestamp
+        run: |
+          DATE_STR=$(date -u +"%B %d, %Y %I:%M %p UTC")
+          # Use '|' as delimiter to avoid path slash conflicts with date
+          sed -i "s|<!-- STREAK_START -->.*<!-- STREAK_END -->|<!-- STREAK_START -->*Last Streak Update: $DATE_STR*<!-- STREAK_END -->|g" README.md
+
+      - name: Commit and Push Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: maintain github contribution streak [skip ci]"
+          branch: main
+          file_pattern: 'README.md'
+          commit_user_name: 'Kunal Tomar'
+          commit_user_email: 'kunaltomar3939@gmail.com'
